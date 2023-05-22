@@ -9,4 +9,7 @@ import java.sql.SQLException;
 public interface IOrderService extends IService<Order> {
 
     void batchSave();
+
+
+    void  mergeDataExport(Integer mId);
 }

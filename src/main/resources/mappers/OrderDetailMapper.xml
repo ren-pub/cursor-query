@@ -3,5 +3,28 @@
 
 <mapper namespace="com.mlamp.cursor.repository.mapper.OrderDetailMapper">
 
+    <select id="selectJoin" resultType="com.mlamp.cursor.dto.OrderDetailDto">
+        select m.id as mainId, order_no as orderNo , creat_time as creatTime, l.id as id, address, `user`
+        from order_main m
+        left join order_detail l on m.id = l.order_id
+        <where>
+            <if test="id != null and id != 0 ">
+                and m.id > #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+        order by m.id
+    </select>
+
+
+    <select id="countJoinQuery" resultType="java.lang.Integer" parameterType="java.lang.Integer" resultSetType="DEFAULT">
+        select count(l.id)
+        from order_main m
+        left join order_detail l on m.id = l.order_id
+        <where>
+            <if test="id != null and id != 0 ">
+                and m.id > #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
 </mapper>
 

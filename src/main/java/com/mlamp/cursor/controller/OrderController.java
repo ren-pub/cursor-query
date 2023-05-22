@@ -4,6 +4,7 @@ import com.mlamp.cursor.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,6 +27,11 @@ public class OrderController {
         return "success";
     }
 
+    @GetMapping("export")
+    public String export(@RequestParam(required = false, value = "id", defaultValue = "0") Integer id) {
+        iOrderService.mergeDataExport(id);
+        return "success";
+    }
 
 }
 

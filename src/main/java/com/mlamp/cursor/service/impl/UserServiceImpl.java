@@ -138,7 +138,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         Cursor<User> cursor = sqlSession.getMapper(UserMapper.class).getUser(id);
 
         List<User> users_temp = new ArrayList<>();
-        File file = new File("a_" + System.currentTimeMillis() + ".xlsx");
+        File file = new File("xlsx/a_" + System.currentTimeMillis() + ".xlsx");
         ExcelWriter writer = EasyExcel.write(file).excelType(ExcelTypeEnum.XLSX).needHead(false).build();
         // 主子表导出性能优化 TODO
         WriteSheet sheet = EasyExcel.writerSheet("用户数据").build();
@@ -195,7 +195,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             watch.stop();
         }
         log.info("导出数据Mock..............");
-        File file = new File("a_" + System.currentTimeMillis() + ".xlsx");
+        File file = new File("xlsx/a_" + System.currentTimeMillis() + ".xlsx");
 
         /***
          * 在程序数据量较大的时候  allUser对象会导致无数次GC 线程压根执行不到此处！！！！
@@ -219,7 +219,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         int limit = 100;
 
 
-        File file = new File("a_" + System.currentTimeMillis() + ".xlsx");
+        File file = new File("xlsx/a_" + System.currentTimeMillis() + ".xlsx");
         ExcelWriter writer = EasyExcel.write(file).excelType(ExcelTypeEnum.XLSX).needHead(false).build();
         WriteSheet sheet = EasyExcel.write(file).sheet("用户数据").build();
 
@@ -258,7 +258,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         Cursor<UserDto> cursor = sqlSession.getMapper(UserMapper.class).selectDetailJoinQuery(id);
 
         List<UserDto> users_temp = new ArrayList<>();
-        File file = new File("a_" + System.currentTimeMillis() + ".xlsx");
+        File file = new File("xlsx/a_" + System.currentTimeMillis() + ".xlsx");
         ExcelWriter writer = EasyExcel.write(file).excelType(ExcelTypeEnum.XLSX).needHead(false).build();
         WriteSheet sheet = EasyExcel.write(file).sheet("用户数据").build();
         for (UserDto user : cursor) {
