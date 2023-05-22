@@ -41,5 +41,32 @@
         </where>
         order by u.id desc
     </select>
+    <select id="selectStream" resultType="com.mlamp.cursor.dto.UserDto" resultSetType="FORWARD_ONLY" fetchSize="-2147483648">
+        select u.id,
+        a,
+        b,
+        c,
+        d,
+        e,
+        f,
+        g,
+        h,
+        i,
+        j,
+        k,
+        age,
+        s.name as sexName,
+        c.career_ch as careerCh ,
+        c.career_en as careerEn
+        from user u
+        left join sex s on u.sex = s.sex
+        left join career c on c.career_en = u.career
+        <where>
+            <if test="id != null and id != 0 ">
+                and u.id > #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+        order by u.id desc
+    </select>
 </mapper>
 

@@ -3,12 +3,10 @@ package com.mlamp.cursor.repository.mapper;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.mlamp.cursor.dto.UserDto;
 import com.mlamp.cursor.repository.bean.User;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.mapping.ResultSetType;
+import org.apache.ibatis.session.ResultHandler;
 
 /**
  * @author 0004171
@@ -36,4 +34,7 @@ public interface UserMapper extends BaseMapper<User> {
 
     Cursor<UserDto> selectDetailJoinQuery(@Param("id") Integer id);
 
+    // @ResultType(UserDto.class)
+//    @Options(resultSetType = ResultSetType.DEFAULT, fetchSize = 1000)
+    void selectStream(@Param("id") Integer id, ResultHandler<UserDto> resultHandler);
 }

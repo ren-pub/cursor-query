@@ -1,4 +1,4 @@
-create database cursor_test;
+createdatabase cursor_test;
 
 create table career
 (

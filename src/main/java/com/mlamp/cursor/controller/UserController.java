@@ -46,7 +46,7 @@ public class UserController {
      * @return
      */
     @GetMapping("query")
-    public String cursorQuery(@RequestParam(required = false) Integer id) {
+    public String cursorQuery(@RequestParam(required = false, defaultValue = "0") Integer id) {
         try {
 
             iUserService.cursorQuery(id);
@@ -64,7 +64,7 @@ public class UserController {
      * @return
      */
     @GetMapping("queryR")
-    public String cursorQueryR(@RequestParam(required = false) Integer id) {
+    public String cursorQueryR(@RequestParam(required = false, defaultValue = "0") Integer id) {
         try {
 
             iUserService.cursorQueryR(id);
@@ -82,7 +82,7 @@ public class UserController {
      * @return
      */
     @GetMapping("write")
-    public String write(@RequestParam(required = false) Integer id) {
+    public String write(@RequestParam(required = false, defaultValue = "0") Integer id) {
         try {
             iUserService.cursorQueryAndWrite(id);
         } catch (Exception e) {
@@ -99,7 +99,7 @@ public class UserController {
      * @return
      */
     @GetMapping("page/w")
-    public String w(@RequestParam(required = false) Integer id) {
+    public String w(@RequestParam(required = false, defaultValue = "0") Integer id) {
         try {
             iUserService.cursorQueryAndPageWrite(id);
         } catch (Exception e) {
@@ -115,7 +115,7 @@ public class UserController {
      * @return
      */
     @GetMapping("page/batchW")
-    public String batchW(@RequestParam(required = false) Integer id) {
+    public String batchW(@RequestParam(required = false, defaultValue = "0") Integer id) {
         try {
             iUserService.cursorQueryAndBatchPageWrite(id);
         } catch (Exception e) {
@@ -133,7 +133,7 @@ public class UserController {
      */
     //join.-------  关联查询导出  使用游标方式
     @GetMapping("writeJ")
-    public String writeJ(@RequestParam(required = false) Integer id) {
+    public String writeJ(@RequestParam(required = false, defaultValue = "0") Integer id) {
 
         try {
             iUserService.writeJ(id);
@@ -143,7 +143,19 @@ public class UserController {
         return "end";
     }
 
-    // TODO 把mes的正式环境的数据倒过来一份 用游标以及其他查询方式试一下效果
+
+    /**
+     * 流式查询
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("stream")
+    public String stream(@RequestParam(required = false, defaultValue = "0") Integer id) {
+        iUserService.stream(id);
+        return "success";
+    }
+
 
 }
 

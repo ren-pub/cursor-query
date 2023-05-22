@@ -20,4 +20,6 @@ public interface IUserService extends IService<User> {
     void writeJ(Integer id);
 
     void cursorQueryR(Integer id);
+
+    void stream(Integer id);
 }

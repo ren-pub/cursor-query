@@ -16,6 +16,9 @@ import com.mlamp.cursor.repository.mapper.UserMapper;
 import com.mlamp.cursor.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.cursor.Cursor;
+import org.apache.ibatis.executor.resultset.ResultSetHandler;
+import org.apache.ibatis.executor.statement.StatementHandler;
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -23,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 
 import java.io.File;
@@ -92,10 +96,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public void cursorQuery(Integer id) throws InterruptedException, SQLException {
-        if (id == null) {
-            // 设置默认值
-            id = 45200;
-        }
+
         //写第一个sheet
         Integer total = baseMapper.getCount(id);
         log.info("总条数:{}", total);
@@ -123,13 +124,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public void cursorQueryAndWrite(Integer id) throws InterruptedException, SQLException {
-        if (id == null) {
-            // 设置默认值
-            id = 45200;
-        }
         // 创建一个表格
         //写第一个sheet
-
         Integer total = baseMapper.getCount(id);
         log.info("总条数:{}", total);
         StopWatch watch = new StopWatch();
@@ -142,8 +138,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         ExcelWriter writer = EasyExcel.write(file).excelType(ExcelTypeEnum.XLSX).needHead(false).build();
         // 主子表导出性能优化 TODO
         WriteSheet sheet = EasyExcel.writerSheet("用户数据").build();
+        watch.start("cursor-query");
         for (User user : cursor) {
-            watch.start("cursor-query" + System.currentTimeMillis());
+
             users_temp.add(user);
             if (users_temp.size() == 500) {
                 log.info("每满足{}条写到磁盘一次", 500);
@@ -154,8 +151,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 log.info("当读取到最后一条数据后 最后一次写出,最后一次处理剩余多少写出多少");
                 users_temp.clear();
             }
-            watch.stop();
+
         }
+        watch.stop();
         writer.finish();
 
         log.info("游标处理导出数据时间:{}", watch);
@@ -216,7 +214,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         StopWatch watch = new StopWatch();
         watch.start("page-write");
         int current = 0;
-        int limit = 100;
+        int limit = 5000;
 
 
         File file = new File("xlsx/a_" + System.currentTimeMillis() + ".xlsx");
@@ -289,11 +287,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public void cursorQueryR(Integer id) {
-        if (id == null) {
-            // 设置默认值
-            id = 45200;
-        }
-
 
         //写第一个sheet
         Integer total = baseMapper.getCount(id);
@@ -328,6 +321,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         } catch (IOException e) {
             log.error("close error", e);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void stream(Integer id) {
+
+        baseMapper.selectStream(id, resultContext -> {
+            int resultCount = resultContext.getResultCount();
+            log.info("流式查询获取数据的量级:{}", resultCount);
+            try {
+                //逻辑代码
+                UserDto resultObject = resultContext.getResultObject();
+            } catch (Exception e) {
+                log.error("XX发生错误,原因: {}", e.getMessage());
+                e.printStackTrace();
+            }
+
+        });
     }
 
 
