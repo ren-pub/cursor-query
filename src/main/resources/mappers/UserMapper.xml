@@ -14,7 +14,7 @@
             </if>
         </where>
     </select>
-    <select id="selectDetailJoinQuery" resultType="com.mlamp.cursor.dto.UserDto" resultSetType="DEFAULT">
+    <select id="selectDetailJoinQuery" resultType="com.mlamp.cursor.dto.UserDto" resultSetType="DEFAULT" fetchSize="-2147483648">
         select u.id,
         a,
         b,
