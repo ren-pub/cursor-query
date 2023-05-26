@@ -13,6 +13,7 @@ import com.mlamp.cursor.dto.UserDto;
 import com.mlamp.cursor.enums.CareerEnum;
 import com.mlamp.cursor.repository.bean.User;
 import com.mlamp.cursor.repository.mapper.UserMapper;
+import com.mlamp.cursor.service.IOrderService;
 import com.mlamp.cursor.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.cursor.Cursor;
@@ -46,6 +47,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Autowired
     private ThreadPoolConfig threadPoolConfig;
+
+
+    @Autowired
+    private IOrderService iOrderService;
 
     @Override
     public void insertCustom() throws SQLException {
@@ -338,6 +343,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         });
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void transactionalTest() throws InterruptedException {
+
+        User user1 = baseMapper.selectById(10);
+        System.out.println("userService修改之前    " + user1.getA());
+        User user = new User();
+        user.setId(10);
+        user.setA("我是个测试的A");
+        baseMapper.updateById(user);
+        System.out.println("userService修改之后     " + user.getA());
+
+        iOrderService.updateUser();
+
+
+        User user2 = baseMapper.selectById(10);
+        System.out.println("userService 中读取orderService修改后的数据    " + user2.getA());
+
+//        Thread.sleep(10000);
+        throw new RuntimeException("手动异常");
+
+    }
+
+
+
 
     private static List<User> buildUsers() {
         CareerEnum[] values = CareerEnum.values();
@@ -361,6 +391,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                     , age, sex, career.name()));
         }
         return users;
+    }
+
+
+    public static void main(String[] args) {
+        /// CsvUtil.getReader().read()
     }
 
 }

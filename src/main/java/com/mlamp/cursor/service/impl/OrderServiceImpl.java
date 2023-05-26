@@ -4,13 +4,16 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.metadata.WriteSheet;
+import com.baomidou.mybatisplus.MybatisAbstractSQL;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.mlamp.cursor.dto.OrderDetailDto;
 import com.mlamp.cursor.excel.ExcelFillCellMergeStrategy;
 import com.mlamp.cursor.repository.bean.Order;
 import com.mlamp.cursor.repository.bean.OrderDetail;
+import com.mlamp.cursor.repository.bean.User;
 import com.mlamp.cursor.repository.mapper.OrderDetailMapper;
 import com.mlamp.cursor.repository.mapper.OrderMapper;
+import com.mlamp.cursor.repository.mapper.UserMapper;
 import com.mlamp.cursor.service.IOrderService;
 import jdk.nashorn.tools.Shell;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +23,16 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.transaction.annotation.Propagation.NESTED;
 
 @Slf4j
 @Service
@@ -39,6 +46,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Autowired
     private OrderDetailMapper orderDetailMapper;
+
+
+    @Autowired
+    private UserMapper userMapper;
 
 
     @Override
@@ -135,6 +146,21 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         } catch (IOException e) {
             log.error("close error", e);
         }
+
+    }
+
+    @Override
+   // @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = NESTED)
+    public void updateUser() {
+     
+        User user = new User();
+        user.setId(10);
+        user.setA("我是order里面修改后的数据呀");
+        userMapper.updateById(user);
+
+        System.out.println("我是order修改后的a    " + user.getA());
+        //throw new RuntimeException("手动异常");
 
     }
 }

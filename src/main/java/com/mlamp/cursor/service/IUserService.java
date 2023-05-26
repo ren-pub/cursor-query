@@ -22,4 +22,9 @@ public interface IUserService extends IService<User> {
     void cursorQueryR(Integer id);
 
     void stream(Integer id);
+
+    void transactionalTest() throws InterruptedException;
+
+
+
 }

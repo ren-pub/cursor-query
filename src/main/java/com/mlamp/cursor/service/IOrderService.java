@@ -12,4 +12,7 @@ public interface IOrderService extends IService<Order> {
 
 
     void  mergeDataExport(Integer mId);
+
+    void updateUser();
+
 }
