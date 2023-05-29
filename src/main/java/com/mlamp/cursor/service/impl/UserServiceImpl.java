@@ -362,11 +362,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         System.out.println("userService 中读取orderService修改后的数据    " + user2.getA());
 
 //        Thread.sleep(10000);
-        throw new RuntimeException("手动异常");
+//        throw new RuntimeException("手动异常");
 
     }
-
-
 
 
     private static List<User> buildUsers() {
@@ -395,7 +393,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 
     public static void main(String[] args) {
-        /// CsvUtil.getReader().read()
+        ArrayList<String> strings = new ArrayList<>();
+        while (true) {
+            strings.add(String.valueOf(System.currentTimeMillis()));
+        }
     }
 
 }

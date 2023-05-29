@@ -150,8 +150,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-   // @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
-    @Transactional(rollbackFor = Exception.class, propagation = NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+   // @Transactional(rollbackFor = Exception.class, propagation = NESTED)
     public void updateUser() {
      
         User user = new User();
