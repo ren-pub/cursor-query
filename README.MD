@@ -168,7 +168,7 @@ GET http://localhost:8888/user/write
 
 消耗时间 29099 millis  
 
-发现256M的内存就可以支撑对40w+数据的平稳导出  
+发现256M的内存就可以支撑对40w+数据的平稳导出,由此可见这个配置下还可以支持更多量级数据的导出....
 
 ### 生产架构设计
 - 无论何种方案,再生产中坚决不能出现OOM 
@@ -189,11 +189,6 @@ GET http://localhost:8888/user/write
 todo
 
 ## 参考文献
-- mybatis官方
-- 我再b站看了一些视频 讲这块的比较少
-- https://blog.csdn.net/weixin_43944305/article/details/128897778 这个写的还行
-- https://blog.csdn.net/m0_61811711/article/details/125604711
-- https://blog.csdn.net/m0_61811711/article/details/125604711
 
 ## 结论
 
